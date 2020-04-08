@@ -20,7 +20,7 @@ import {
   getNumberArray,
   setNumberArray,
 } from '../local-storage'
-import { PushOptions } from '../git'
+import { IPushOptions } from '../git'
 
 const StatsEndpoint = 'https://central.github.com/api/usage/desktop'
 
@@ -818,7 +818,7 @@ export class StatsStore implements IStatsStore {
 
   public async recordPush(
     githubAccount: Account | null,
-    options?: PushOptions
+    options?: IPushOptions
   ) {
     if (githubAccount === null) {
       await this.recordPushToGenericRemote(options)
@@ -830,7 +830,7 @@ export class StatsStore implements IStatsStore {
   }
 
   /** Record that the user pushed to GitHub.com */
-  private async recordPushToGitHub(options?: PushOptions): Promise<void> {
+  private async recordPushToGitHub(options?: IPushOptions): Promise<void> {
     if (options && options.forceWithLease) {
       await this.updateDailyMeasures(m => ({
         dotcomForcePushCount: m.dotcomForcePushCount + 1,
@@ -846,7 +846,7 @@ export class StatsStore implements IStatsStore {
 
   /** Record that the user pushed to a GitHub Enterprise Server instance */
   private async recordPushToGitHubEnterprise(
-    options?: PushOptions
+    options?: IPushOptions
   ): Promise<void> {
     if (options && options.forceWithLease) {
       await this.updateDailyMeasures(m => ({
@@ -865,7 +865,7 @@ export class StatsStore implements IStatsStore {
 
   /** Record that the user pushed to a generic remote */
   private async recordPushToGenericRemote(
-    options?: PushOptions
+    options?: IPushOptions
   ): Promise<void> {
     if (options && options.forceWithLease) {
       await this.updateDailyMeasures(m => ({
@@ -1359,7 +1359,9 @@ export class StatsStore implements IStatsStore {
   private post(body: object): Promise<Response> {
     const options: RequestInit = {
       method: 'POST',
-      headers: new Headers({ 'Content-Type': 'application/json' }),
+      headers: new Headers({
+        'Content-Type': 'application/json',
+      }),
       body: JSON.stringify(body),
     }
 

@@ -150,7 +150,7 @@ import {
   abortRebase,
   continueRebase,
   rebase,
-  PushOptions,
+  IPushOptions,
   RebaseResult,
   getRebaseSnapshot,
   IStatusResult,
@@ -3487,7 +3487,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
 
   public async _push(
     repository: Repository,
-    options?: PushOptions
+    options?: IPushOptions
   ): Promise<void> {
     return this.withAuthenticatingUser(repository, (repository, account) => {
       return this.performPush(repository, account, options)
@@ -3497,7 +3497,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
   private async performPush(
     repository: Repository,
     account: IGitAccount | null,
-    options?: PushOptions
+    options?: IPushOptions
   ): Promise<void> {
     const state = this.repositoryStateCache.get(repository)
     const { remote } = state
@@ -3586,7 +3586,10 @@ export class AppStore extends TypedBaseStore<IAppState> {
         // I'm also adding a non fatal exception if this ever happens
         // so that we can confidently remove this safeguard in a future
         // release.
-        const safeRemote: IRemote = { name: remoteName, url: remote.url }
+        const safeRemote: IRemote = {
+          name: remoteName,
+          url: remote.url,
+        }
 
         if (safeRemote.name !== remote.name) {
           sendNonFatalException(
@@ -5711,7 +5714,12 @@ export class AppStore extends TypedBaseStore<IAppState> {
           ) {
             this.currentPopup = {
               ...this.currentPopup,
-              progress: { kind: 'generic', title, value, description },
+              progress: {
+                kind: 'generic',
+                title,
+                value,
+                description,
+              },
             }
             this.emitUpdate()
           }

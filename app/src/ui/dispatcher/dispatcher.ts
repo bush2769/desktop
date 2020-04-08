@@ -22,7 +22,7 @@ import {
 import {
   isGitRepository,
   RebaseResult,
-  PushOptions,
+  IPushOptions,
   getCommitsInRange,
   getBranches,
 } from '../../lib/git'
@@ -540,7 +540,7 @@ export class Dispatcher {
     return this.appStore._push(repository)
   }
 
-  private pushWithOptions(repository: Repository, options?: PushOptions) {
+  private pushWithOptions(repository: Repository, options?: IPushOptions) {
     if (options !== undefined && options.forceWithLease) {
       this.dropCurrentBranchFromForcePushList(repository)
     }
